@@ -1,0 +1,18 @@
+[Unit]
+Description=Netscape Node Agent — AI Mesh Auto-Join
+After=network-online.target tailscaled.service
+Wants=network-online.target tailscaled.service
+
+[Service]
+Type=simple
+User=%i
+ExecStart=/usr/bin/python3 /opt/netscape/agent/node_agent.py
+Restart=on-failure
+RestartSec=10
+Environment=PYTHONUNBUFFERED=1
+
+# Wait for Tailscale to establish connection
+ExecStartPre=/bin/bash -c 'until tailscale status --json | grep -q "Online.*true"; do sleep 2; done'
+
+[Install]
+WantedBy=multi-user.target

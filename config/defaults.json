@@ -1,0 +1,9 @@
+{
+    "default_theme": "amber",
+    "music_player": "strawberry",
+    "retune432_path": "",
+    "animations_fullscreen": true,
+    "pipboy_refresh_sec": 30,
+    "netscape_coordinator_url": "http://100.x.x.x:7070",
+    "kimi_telegram_check": false
+}

@@ -1,0 +1,15 @@
+[Unit]
+Description=Netscape Coordinator — AI Mesh Discovery Service
+After=network-online.target tailscaled.service ollama.service
+Wants=network-online.target tailscaled.service
+
+[Service]
+Type=simple
+User=%i
+ExecStart=/usr/bin/python3 /opt/netscape/coordinator/discovery.py
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
