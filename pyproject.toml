@@ -1,0 +1,49 @@
+[project]
+name = "drowned-terminal"
+version = "0.1.0"
+description = "Retro-futuristic TUI dashboard with a distributed inference mesh (Netscape)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Peter Clemente III", email = "peterc3@live.com" }]
+keywords = ["tui", "textual", "dashboard", "inference", "mesh", "retro"]
+
+# Runtime dependencies. See requirements.txt for the same set with rationale.
+# The TUI (app.py) needs textual + rich; the Netscape mesh services
+# (discovery.py, node_agent.py) need only aiohttp.
+dependencies = [
+    "aiohttp>=3.9.0",
+    "textual>=0.50.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+# Install with: pip install -e ".[dev]"
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.5",
+]
+
+[project.urls]
+Homepage = "https://github.com/Peterc3-dev/drowned-terminal"
+
+# This is an application repo (scripts + packages), not a distributable
+# library, so no build backend / wheel packaging is declared. The metadata
+# above documents dependencies and tooling config; install deps via
+# `pip install -r requirements.txt`.
+
+[tool.ruff]
+# Python 3.10+ minimum (uses `X | Y` style hints and the | union operator).
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+# Default rule set (E, F, W). The repo was brought clean against these.
+extend-select = []
+
+[tool.pytest.ini_options]
+# Scope test collection to the pure-logic unit tests under tests/.
+# These import only core.colors / core.tiling / core.sounds, none of which
+# pull in textual, rich, aiohttp, or any GPU/model dependency.
+testpaths = ["tests"]
+addopts = "-q"

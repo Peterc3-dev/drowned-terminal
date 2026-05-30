@@ -11,7 +11,6 @@ Everything else (borders, text, controls) uses the CMYK phosphor palette.
 This is the crack in the brass housing where raw energy shows through.
 """
 
-import struct
 import random
 from pathlib import Path
 from dataclasses import dataclass
@@ -135,7 +134,7 @@ def render_moodbar_ansi(data: MoodbarData, width: int = 80,
 
             # Playhead indicator
             if col == pos_col:
-                line += f"\033[48;2;255;255;255m \033[0m"
+                line += "\033[48;2;255;255;255m \033[0m"
             else:
                 line += f"\033[48;2;{r};{g};{b}m \033[0m"
 
@@ -149,10 +148,6 @@ def render_music_panel(width: int = 60, theme_mode: str = "amber") -> str:
     Render the complete music module panel.
     Border and text use CMYK phosphor. Moodbar uses native RGB.
     """
-    # Demo data
-    demo_mood = MoodbarData.generate_demo()
-    bar_width = width - 6  # account for borders
-
     lines = []
     lines.append(f"  ╔{'═' * (width - 4)}╗")
     lines.append(f"  ║{'♫  M U S I C  ♫':^{width - 4}}║")
@@ -215,7 +210,7 @@ class StrawberryAdapter(PlayerAdapter):
             )
             # Parse D-Bus output (simplified)
             output = result.stdout
-            title = artist = album = "Unknown"
+            title = artist = "Unknown"
             if "xesam:title" in output:
                 title = output.split("xesam:title")[1].split('"')[1]
             if "xesam:artist" in output:

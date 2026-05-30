@@ -17,9 +17,8 @@ Module categories:
 """
 
 from __future__ import annotations
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import TYPE_CHECKING
-from textual.widget import Widget
 from textual.widgets import Static
 
 if TYPE_CHECKING:
@@ -106,7 +105,6 @@ class BaseModule(Static):
     def render_header(self) -> str:
         """Render the module's header bar with glyph and name."""
         info = self.module_info
-        p = self.theme.phosphor
         glow = self.theme.color("glow")
         copper = self.theme.color("copper")
         return (

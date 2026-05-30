@@ -17,7 +17,6 @@ This module is the REMOTE CONTROL — shows what's playing, queue, controls.
 
 import json
 import subprocess
-from pathlib import Path
 from dataclasses import dataclass
 
 

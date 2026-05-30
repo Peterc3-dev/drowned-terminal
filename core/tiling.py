@@ -210,9 +210,7 @@ class TilingLayout:
             )
         else:
             # Master + stack: first pane is master (left 40%), rest stack right
-            stack_children = []
             rest = self._pane_order[1:]
-            ratio_per = 1.0 / len(rest)
 
             # Build stack as nested vertical splits
             if len(rest) == 1:

@@ -1,1 +1,11 @@
+# Runtime dependencies for Drowned Terminal.
+#
+# Pins are conservative lower bounds matching the import surface:
+#   - app.py (TUI dashboard) imports textual + rich
+#   - discovery.py / node_agent.py (Netscape mesh) import aiohttp
+#
+# The core/ and modules/ logic (colours, tiling, sound synthesis,
+# cipher/numeral helpers) is pure standard library and needs none of these.
 aiohttp>=3.9.0
+textual>=0.50.0
+rich>=13.0.0
