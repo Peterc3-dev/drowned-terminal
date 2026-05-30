@@ -27,8 +27,6 @@ import struct
 import math
 import random
 import subprocess
-import tempfile
-import os
 import threading
 from pathlib import Path
 

@@ -17,6 +17,7 @@ The moodbar module bypasses this engine and renders in native RGB —
 it's the one element that bleeds through the brass housing.
 """
 
+import random as _random
 from dataclasses import dataclass
 
 
@@ -406,8 +407,6 @@ GLYPHS = {
 # ═══════════════════════════════════════════════════════════════
 # DECORATIVE BORDER GENERATORS — alien-tech framing
 # ═══════════════════════════════════════════════════════════════
-
-import random as _random
 
 # Curated sets for different decorative purposes
 ALIEN_BORDER_GLYPHS = [

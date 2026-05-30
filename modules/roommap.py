@@ -22,7 +22,7 @@ import math
 import time
 from dataclasses import dataclass
 
-from core.colors import ThemeEngine, CHROME, to_alien
+from core.colors import ThemeEngine, CHROME
 
 
 def ansi_fg(r: int, g: int, b: int) -> str:

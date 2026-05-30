@@ -15,11 +15,10 @@ Displays real-time personal stats:
 All meters use CMYK phosphor colors with brass framing.
 """
 
-import time
 import json
 from pathlib import Path
-from datetime import datetime, timedelta
-from dataclasses import dataclass, field
+from datetime import datetime
+from dataclasses import dataclass
 
 # Config file for personal data
 PIPBOY_CONFIG = Path.home() / ".netscape" / "pipboy.json"

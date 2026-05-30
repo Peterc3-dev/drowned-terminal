@@ -18,7 +18,6 @@ import signal
 import subprocess
 import logging
 import platform
-import shutil
 from pathlib import Path
 from aiohttp import web, ClientSession, ClientTimeout
 

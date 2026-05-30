@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install tooling
+        # Only the lint/test tooling is installed. The runtime deps
+        # (textual, rich, aiohttp) and any model/GPU backends are NOT
+        # needed: ruff is fully static, and the unit tests under tests/
+        # import only standard-library-backed core modules.
+        run: python -m pip install --upgrade pip ruff pytest
+
+      - name: Ruff (static lint, whole repo)
+        run: ruff check .
+
+      - name: Pytest (pure-logic unit tests only)
+        # Scoped to tests/ so CI never tries to import textual/rich/aiohttp
+        # or any GPU/model-dependent code path.
+        run: pytest tests/ -q

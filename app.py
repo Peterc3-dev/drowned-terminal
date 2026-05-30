@@ -20,19 +20,16 @@ Grid controls:
   q              Quit
 """
 
-import time as _time
 from textual.app import App, ComposeResult
 from textual.containers import Container
 from textual.widgets import Static
 from textual.binding import Binding
-from textual.timer import Timer
 from rich.text import Text
 
-from core.colors import ThemeEngine, CHROME, roman, to_alien, alien_border
+from core.colors import ThemeEngine, CHROME, roman, alien_border
 from core.modules import create_default_registry, ModuleInfo
 from core.sounds import SoundEngine
-from modules.animations import render_frame_for_cell, ANIMATIONS
-from modules.roommap import render_room_map_plain, ROOM_LOOKUP
+from modules.roommap import ROOM_LOOKUP
 from modules.pipboy import (
     load_pipboy_config, calculate_hunger, calculate_thirst, days_until_payday,
 )
@@ -57,7 +54,6 @@ class GridCell(Static):
 
     def render(self) -> Text:
         glow = self.ct.color("glow").to_hex()
-        copper = CHROME["copper"].to_hex()
         brass = CHROME["brass"].to_hex()
         mid = self.ct.color("mid").to_hex()
         dim = self.ct.color("dim").to_hex()
@@ -129,9 +125,9 @@ class GridCell(Static):
             bh = "█" * int(h * 12) + "░" * (12 - int(h * 12))
             bt = "█" * int(th * 12) + "░" * (12 - int(th * 12))
             return [f" CAPS: ${bal:,.2f}", f" PAY: {days}d to payday",
-                    f" ⛅ Weather: --°F", f" Hunger:[{bh}]",
-                    f" Thirst:[{bt}]", f" Kimi: awaiting",
-                    f" Net: 0/0 nodes"]
+                    " ⛅ Weather: --°F", f" Hunger:[{bh}]",
+                    f" Thirst:[{bt}]", " Kimi: awaiting",
+                    " Net: 0/0 nodes"]
 
         elif mid == "tools.video":
             return [" Stremio: checking...", " Player: not connected",
@@ -143,14 +139,9 @@ class GridCell(Static):
                     " [r]Retune432 [v]Viz"]
 
         elif mid == "tools.animation":
-            # Live animation preview!
-            lines = render_frame_for_cell("mandala", 28, 5, self.anim_time)
-            # Strip ANSI for Rich Text (Rich handles its own colors)
-            clean = []
-            for line in lines[:5]:
-                # Keep it raw — the ANSI codes won't render in Rich
-                # Instead give a text summary
-                pass
+            # Live animation preview — show a static text summary here.
+            # The full ANSI frames don't render inside Rich Text cells, so
+            # the animation runs standalone (see modules/animations.py).
             return [" ✦ Tesseract (4D cube)",
                     " ✦ Helix    (spectral)",
                     " ✦ Mandala  (sacred)",
@@ -231,11 +222,11 @@ class RoomView(Static):
             t.append(f" Connected to: {conns}\n\n", style=dim)
 
         # Module-specific expanded content
-        t.append(f" [Full module content renders here]\n", style=dim)
-        t.append(f" [Interactive learning paths, tools, etc.]\n\n", style=dim)
+        t.append(" [Full module content renders here]\n", style=dim)
+        t.append(" [Interactive learning paths, tools, etc.]\n\n", style=dim)
 
         t.append(f" {'─' * 40}\n", style=copper)
-        t.append(f" Press [Esc] to return to cockpit\n", style=dim)
+        t.append(" Press [Esc] to return to cockpit\n", style=dim)
 
         return t
 
@@ -438,33 +429,39 @@ class DrownedTerminal(App):
             self._enter_room()
 
     def action_nav_up(self):
-        if self.in_room: return
+        if self.in_room:
+            return
         self.sel_row = max(0, self.sel_row - 1)
         self.sfx.play("hover")
         self._refresh_cells()
 
     def action_nav_down(self):
-        if self.in_room: return
+        if self.in_room:
+            return
         self.sel_row = min(self.grid_rows - 1, self.sel_row + 1)
         self.sfx.play("hover")
         self._refresh_cells()
 
     def action_nav_left(self):
-        if self.in_room: return
+        if self.in_room:
+            return
         self.sel_col = max(0, self.sel_col - 1)
         self.sfx.play("hover")
         self._refresh_cells()
 
     def action_nav_right(self):
-        if self.in_room: return
+        if self.in_room:
+            return
         self.sel_col = min(self.grid_cols - 1, self.sel_col + 1)
         self.sfx.play("hover")
         self._refresh_cells()
 
     def action_nav_next(self):
-        if self.in_room: return
+        if self.in_room:
+            return
         occupied = [(r, c) for (r, c), v in self.grid_state.items() if v]
-        if not occupied: return
+        if not occupied:
+            return
         cur = (self.sel_row, self.sel_col)
         if cur in occupied:
             idx = (occupied.index(cur) + 1) % len(occupied)
@@ -475,7 +472,8 @@ class DrownedTerminal(App):
         self._refresh_cells()
 
     def action_clear_cell(self):
-        if self.in_room: return
+        if self.in_room:
+            return
         self.grid_state[(self.sel_row, self.sel_col)] = None
         self.sfx.play("click")
         self._refresh_cells()
@@ -499,7 +497,7 @@ class DrownedTerminal(App):
             self._refresh_cells()
 
     def action_toggle_sound(self):
-        state = self.sfx.toggle()
+        self.sfx.toggle()
         self.sfx.play("click")
         self._update_bars()
 
